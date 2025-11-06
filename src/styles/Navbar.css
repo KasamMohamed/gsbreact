@@ -1,0 +1,40 @@
+/* src/styles/Navbar.css */
+
+.navbar {
+  padding: 1rem;
+  background-color: #333;
+  color: white;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-links a {
+  color: white;
+  margin-right: 1rem;
+  text-decoration: none;
+}
+
+.navbar-links a:hover {
+  text-decoration: underline;
+}
+
+.navbar-auth a {
+  color: white;
+  margin-left: 1rem;
+  text-decoration: none;
+}
+
+.navbar-auth a:hover {
+  text-decoration: underline;
+}
+
+.navbar-logo {
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-right: 1rem;
+}

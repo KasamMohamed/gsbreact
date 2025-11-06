@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { AuthProvider } from './context/AuthContext'; // ✅ importer le contexte
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider> {/* ✅ Fournir le contexte à toute l'application */}
+      <App />
+    </AuthProvider>
   </React.StrictMode>
 );
 
