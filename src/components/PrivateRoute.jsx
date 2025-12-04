@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 
 export default function PrivateRoute({ children }) {
   const { token, loading } = useAuth();
-  if (loading==true) {
+  if (loading) {
     return <div>Chargement...</div>;
   }
 

@@ -3,6 +3,7 @@ import React from 'react';
 function Home() {
   return (
     <div>
+      <title>GSB Frais</title>
       <h1>Bienvenue</h1>
     </div>
   );
