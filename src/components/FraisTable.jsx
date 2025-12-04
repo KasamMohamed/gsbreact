@@ -3,6 +3,7 @@ import "../styles/FraisTable.css";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { API_URL } from "../services/authService";
+import { useNavigate } from "react-router-dom";
 
 export default function FraisTable() {
   const [fraisList, setFraisList] = useState([]);
@@ -10,6 +11,8 @@ export default function FraisTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterNonNull, setFilterNonNull] = useState(true);
   const [montantmax, setmontantmax] = useState("");
+  const navigate = useNavigate();
+
   
   const {user, token} = useAuth();
 
@@ -96,6 +99,7 @@ const filteredFrais = fraisList
             <th>Date modification</th>
             <th>Montant saisi</th>
             <th>Montant validé</th>
+            <th>Actions</th>
           </tr>
         </thead>
 
@@ -110,6 +114,13 @@ const filteredFrais = fraisList
               <td>{frais.datemodification}</td>
               <td></td>
               <td>{frais.montantvalide}</td>
+              <td> 
+                <button onClick={() => navigate(`/frais/modifier/${frais.id_frais}`)} 
+                        className="edit-button" 
+                > 
+                  Modifier 
+                </button> 
+              </td>
             </tr>
           ))}
         </tbody>

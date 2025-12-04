@@ -12,6 +12,7 @@ function Navbar() {
           <span className="navbar-logo">GSB Frais</span>
           <Link to="/">Accueil</Link>
           {user && <Link to="/dashboard">Tableau de bord</Link>}
+          {user && <Link to="/frais/ajouter">Ajouter frais</Link>}
         </div>
 
         <div className="navbar-auth">
