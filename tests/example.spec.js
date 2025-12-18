@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test';
   //await expect(page).toHaveTitle(/GSB Frais/);
 //});
 
-test('get started link', async ({ page }) => {
+test('Login dashbord refresh', async ({ page }) => {
   await page.goto('http://localhost:3000/');
 
   // Click the get started link.
@@ -16,4 +16,12 @@ test('get started link', async ({ page }) => {
 
   // Expects page to have a heading with the name of Installation.
   await expect(page.getByRole('heading', { name: 'Connexion' })).toBeVisible();
+
+  await page.fill('input[name="login"]', 'andre');
+  await page.fill('input[name="password"]', 'secret');
+  await page.click('button[type="submit"]');
+  await page.goto('http://localhost:3000/dashboard');
+  await page.getByRole('link', { name: 'Déconnexion' }).click();
+  await page.goto('http://localhost:3000/login');
+  await expect(page).toHaveURL('http://localhost:3000/login');
 });

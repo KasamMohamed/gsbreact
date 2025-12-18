@@ -34,7 +34,7 @@ export default function Login() {
           <div>
             <label>Login :</label>
             <input
-              type="text"
+              name="login"
               value={login}
               onChange={(e) => setLogin(e.target.value)}
               required
@@ -44,6 +44,7 @@ export default function Login() {
           <div>
             <label>Mot de passe :</label>
             <input
+              name="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

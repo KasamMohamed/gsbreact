@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/FraisForm.css";
 import axios from "axios";
 import { API_URL, getCurrentUser } from "../services/authService";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export default function FraisForm() {
+export default function FraisForm({ frais = null }) {
   const [idFrais, setIdFrais] = useState(null);
   const [anneeMois, setAnneeMois] = useState("");
   const [nbJustificatifs, setNbJustificatifs] = useState("");
@@ -13,6 +14,17 @@ export default function FraisForm() {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
+
+  // Pré-remplir le formulaire si on modifie un frais existant 
+  useEffect(() => { 
+    if (frais) { 
+      setIdFrais(frais.id_frais); 
+      setMontant(frais.montantvalide || ''); 
+      setAnneeMois(frais.anneemois || '');
+      setNbJustificatifs(frais.nbjustificatifs || '');
+      // TODO : compléter en affectant la valeur à anneeMois et nbJustificatifs 
+      } 
+    }, [frais]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();                    
@@ -25,19 +37,50 @@ export default function FraisForm() {
         throw new Error("Token manquant");
       }
 
+      //const fraisData = {
+        //anneemois: anneeMois,
+        //nbjustificatifs: parseInt(nbJustificatifs, 10),
+        //id_visiteur: getCurrentUser()["id_visiteur"],
+      //};
+
+      //const response = await 
+      //axios.post(`${API_URL}frais/ajout`, fraisData,{
+          //headers: { Authorization: `Bearer ${token}` },
+        //}
+      //);
+
       const fraisData = {
         anneemois: anneeMois,
         nbjustificatifs: parseInt(nbJustificatifs, 10),
-        id_visiteur: getCurrentUser()["id_visiteur"],
       };
 
-      const response = await 
-      axios.post(`${API_URL}frais/ajout`, fraisData,{
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      if (frais) {// Mise à jour d'un frais existant (UPDATE) 
+       fraisData["id_frais"] = idFrais; // ajoute id_frais au JSON fraisData
 
-      console.log(response);
+       fraisData["montantvalide"] = parseFloat(montant); 
+       // TODO : compléter la requête 
+       const response = await axios.post( 
+        // TODO : passer l’url de modification (voir le tableau au début du doc), 
+        `${API_URL}frais/modif`,
+        // TODO : passer l’objet JSON du body,
+        fraisData,
+        // TODO : passer le token dans les headers
+        {
+          headers: { Authorization: `Bearer ${token}`},
+        }  
+        ); 
+        console.log(response) 
+      } else { // Ajout d'un nouveau frais (CREATE)
+        fraisData["id_visiteur"]= getCurrentUser()["id_visiteur"];
+      // TODO : Ajouter id_visiteur à fraisData 
+      const response = await axios.post(`${API_URL}frais/ajout`, 
+        fraisData, 
+        {
+        headers: { Authorization: `Bearer ${token}` }, 
+      }
+    ); 
+      console.log(response) 
+    }
 
       navigate("/dashboard");
     } catch (err) {
@@ -52,7 +95,7 @@ export default function FraisForm() {
 
   return (
     <div className="frais-form-container">
-      <h2>Saisir un frais</h2>
+      <h2>{frais ? 'Modifier le frais' : 'Saisir un frais'}</h2>
 
       {error && <div className="error-message">{error}</div>}
 
@@ -86,6 +129,7 @@ export default function FraisForm() {
             onChange={(e) => setMontant(e.target.value)}
           />
         </div>
+        <Link className="frais-hors-forfait-link" to={`/frais/${idFrais}/hors-forfait`}>Frais hors forfait</Link>
 
         <button type="submit" disabled={loading}>
           {loading ? "Enregistrement..." : "Ajouter"}

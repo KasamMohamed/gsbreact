@@ -39,6 +39,24 @@ export default function FraisTable() {
       fetchFrais(); // Appelle la fonction pour récupérer les données 
     }, []); // Tableau de dépendances vide = exécute une seule fois
 
+    const handleDelete = async (id) => { 
+      if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce frais ?')) return; 
+      
+      try { 
+        await axios.delete( 
+          // TODO : passer l’url de suppression, 
+          `${API_URL}frais/suppr`,
+          { 
+            data : {id_frais : id }, 
+            headers : {Authorization : `Bearer ${token}` }, 
+          } 
+        ); // Met à jour FraisList en ignorant le frais qui a été supprimé : on ne garde que les frais dont l’id est différent de l’id du frais sélectionné 
+        setFraisList(fraisList.filter((frais) => frais.id_frais !== id)); 
+      } catch (error) { 
+        console.error('Erreur lors de la suppression:', error); 
+      } 
+    };
+
   if (loading) return <div><b>Chargement des frais…</b></div>; 
 
 const filteredFrais = fraisList
@@ -120,6 +138,11 @@ const filteredFrais = fraisList
                 > 
                   Modifier 
                 </button> 
+                <button onClick={() => handleDelete(frais.id_frais)} 
+                        className="delete-button" 
+                > 
+                  Supprimer 
+                </button>
               </td>
             </tr>
           ))}
